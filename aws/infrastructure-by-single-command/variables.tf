@@ -26,3 +26,8 @@ variable "hosted_zone" {
   type        = string
   default     = "liubenok.pp.ua"
 }
+
+variable "cluster_name" {
+  description = "EKS cluster name"
+  type        = string
+  default     = "${var.deployment_prefix}-eks-cluster"

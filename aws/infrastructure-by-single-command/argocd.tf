@@ -6,8 +6,7 @@ provider "helm" {
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
       command     = "aws"
-      # This requires the awscli to be installed locally where Terraform is executed
-      args = ["eks", "get-token", "--cluster-name", "demo-eks-cluster", "--region", var.aws_region]
+      args = ["eks", "get-token", "--cluster-name", var.cluster_name, "--region", var.aws_region]
     }
   }
 }
@@ -35,13 +34,13 @@ resource "helm_release" "argocd" {
   namespace        = local.argocd.namespace
   create_namespace = true
 
-  # values = [
-  #   templatefile("${path.module}/templates/values.yaml", {
-  #     k8s_ssh_private_key = tls_private_key.ed25519_argocd.private_key_openssh,
-  #     k8s_repo            = local.argocd.github_repo_name,
-  #     host                = var.hosted_zone
-  #   })
-  # ]
+  values = [
+    templatefile("${path.module}/templates/values.yaml", {
+      k8s_ssh_private_key = tls_private_key.ed25519_argocd.private_key_openssh,
+      k8s_repo            = local.argocd.github_repo_name,
+      host                = var.hosted_zone
+    })
+  ]
 
   depends_on = [
     module.eks
