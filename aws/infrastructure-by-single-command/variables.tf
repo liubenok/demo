@@ -21,3 +21,8 @@ variable "deployment_prefix" {
   default     = "demo"
 }
 
+variable "hosted_zone" {
+  description = "hosted zone name"
+  type        = string
+  default     = "liubenok.pp.ua"
+}

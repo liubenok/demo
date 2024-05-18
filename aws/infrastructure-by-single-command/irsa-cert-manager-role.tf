@@ -3,11 +3,10 @@ locals {
     namespace            = "cert-manager"
     service_account_name = "cert-manager-route53"
   }
-  hosted_zone = "liubenok.pp.ua"
 }
 
 data "aws_route53_zone" "zone" {
-  name         = local.hosted_zone
+  name         = ${var.hosted_zone}
   private_zone = false
 }
 
