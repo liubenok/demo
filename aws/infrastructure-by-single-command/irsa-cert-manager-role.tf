@@ -3,11 +3,17 @@ locals {
     namespace            = "cert-manager"
     service_account_name = "cert-manager-route53"
   }
+  hosted_zone = "liubenok.pp.ua"
+}
+
+data "aws_route53_zone" "zone" {
+  name         = local.hosted_zone
+  private_zone = false
 }
 
 module "irsa_cert_manager" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.3.0"
+  version                       = "5.39.1"
   create_role                   = true
   role_name                     = "${local.cluster_name}-cert-manager-role"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
