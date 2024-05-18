@@ -6,44 +6,44 @@ provider "helm" {
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
       command     = "aws"
-      # This for awscli to be installed locally where Terraform is executed
+      # This requires the awscli to be installed locally where Terraform is executed
       args = ["eks", "get-token", "--cluster-name", module.eks.cluster_id]
     }
   }
 }
 
 
-locals {
-  argocd = {
-    github_repo_name = "liubenok/demo"
-    version                  = "6.9.3"
-    namespace                = "argocd"
-  }
-}
+# locals {
+#   argocd = {
+#     github_repo_name = "liubenok/demo"
+#     version                  = "6.9.3"
+#     namespace                = "argocd"
+#   }
+# }
 
-# ED25519 key for ArgoCD
-resource "tls_private_key" "ed25519_argocd" {
-  algorithm = "ED25519"
-}
+# # ED25519 key for ArgoCD
+# resource "tls_private_key" "ed25519_argocd" {
+#   algorithm = "ED25519"
+# }
 
-resource "helm_release" "argocd" {
-  name = "argocd"
+# resource "helm_release" "argocd" {
+#   name = "argocd"
 
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argo-cd"
-  version          = local.argocd.version
-  namespace        = local.argocd.namespace
-  create_namespace = true
+#   repository       = "https://argoproj.github.io/argo-helm"
+#   chart            = "argo-cd"
+#   version          = local.argocd.version
+#   namespace        = local.argocd.namespace
+#   create_namespace = true
 
-  values = [
-    templatefile("${path.module}/templates/values.yaml", {
-      k8s_ssh_private_key = tls_private_key.ed25519_argocd.private_key_openssh,
-      k8s_repo            = local.argocd.github_repo_name,
-      host                = var.hosted_zone
-    })
-  ]
+#   values = [
+#     templatefile("${path.module}/templates/values.yaml", {
+#       k8s_ssh_private_key = tls_private_key.ed25519_argocd.private_key_openssh,
+#       k8s_repo            = local.argocd.github_repo_name,
+#       host                = var.hosted_zone
+#     })
+#   ]
 
-  depends_on = [
-    module.eks
-  ]
-}
+#   depends_on = [
+#     module.eks
+#   ]
+# }
