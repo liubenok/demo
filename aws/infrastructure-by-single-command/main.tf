@@ -6,13 +6,6 @@ terraform {
     dynamodb_table = "liubenok-terraform-states-lock"
     encrypt        = true
   }
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "3.56.0"
-    }
-  }
-  required_version = ">= 1.0.2"
 }
 
 provider "aws" {

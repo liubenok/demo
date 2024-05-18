@@ -5,21 +5,19 @@ on:
     branches:
       - main
     paths:
-      - 'aws/networking/vpc/**'
-      - 'aws/networking/sg/**'
+      - 'aws/infrastructure-by-single-command/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'aws/networking/vpc/**'
-      - 'aws/networking/sg/**'
+      - 'aws/infrastructure-by-single-command/**'
 
 jobs:
   terraform:
     strategy:
       max-parallel: 1
       matrix:
-        tf_actions_working_dir: [aws/networking/vpc, aws/networking/sg]
+        tf_actions_working_dir: [aws/infrastructure-by-single-command]
     name: "Terraform"
     runs-on: ubuntu-latest
     defaults:
