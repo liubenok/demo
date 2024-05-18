@@ -1,0 +1,14 @@
+server:
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    ingressClassName: nginx
+    hosts:
+     - argocd.${host}
+    tls:
+    - hosts:
+      - argocd.${host}
+      secretName: argocd-tls
+  extraArgs:
+    - --insecure
