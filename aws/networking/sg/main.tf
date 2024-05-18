@@ -23,9 +23,7 @@ provider "aws" {
       "TerminationDate" = "Permanent",
       "Environment"     = "Development",
       "Team"            = "DevOps",
-      "DeployedBy"      = "Terraform",
-      "Description"     = "For General Purposes"
-      "OwnerEmail"      = "devops@test.com"
+      "Application"     = "Terraform Backend"
     }
   }
 }
