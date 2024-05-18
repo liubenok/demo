@@ -31,9 +31,9 @@ provider "aws" {
 data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {
-    bucket = "aws-terraform-states-backend"
+    bucket = "liubenok-terraform-states-backend-001"
     key    = "networking/vpc/terraform.tfstate"
-    region = "eu-north-1"
+    region = "us-east-1"
   }
 }
 
