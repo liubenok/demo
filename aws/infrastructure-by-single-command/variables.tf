@@ -30,5 +30,5 @@ variable "hosted_zone" {
 variable "cluster_name" {
   description = "EKS cluster name"
   type        = string
-  default     = "${var.deployment_prefix}-eks-cluster"
+  default     = "demo-eks-cluster"
 }
