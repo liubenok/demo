@@ -26,3 +26,9 @@ variable "hosted_zone" {
   type        = string
   default     = "liubenok.pp.ua"
 }
+
+variable "cluster_name" {
+  description = "EKS cluster name"
+  type        = string
+  default     = "demo-eks-cluster"
+}
