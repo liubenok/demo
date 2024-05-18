@@ -23,7 +23,7 @@ provider "aws" {
       "TerminationDate" = "Permanent",
       "Environment"     = "Development",
       "Team"            = "DevOps",
-      "Application"     = "Terraform Backend"
+      "Application"     = "Terraform  Backend"
     }
   }
 }
