@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: {{ .Values.source.repoURL }}
     targetRevision: main
-    path: k8s/infrastructure/charts/bootstrap-app
+    path: aws/infrastructure-by-single-command/k8s/infrastructure/charts/bootstrap-app
     helm:
       values: |
         clusterName: {{ .Values.clusterName }}
@@ -28,7 +28,7 @@ spec:
           enabled: true
           repoURL: {{ .Values.source.repoURL }}
           version: {{ .Values.source.targetRevision }}
-          path: k8s/infrastructure/charts/cert-manager-configs
+          path: aws/infrastructure-by-single-command/k8s/infrastructure/charts/cert-manager-configs
           acme:
             email: {{ .Values.bootstrapApp.certManagerConfigs.acme.email }}
             dnsZones:
