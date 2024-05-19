@@ -16,12 +16,22 @@ provider "aws" {
 }
 
 locals {
-  cluster_name = "${var.deployment_prefix}-eks-cluster"
+  cluster_name = "${var.deployment_prefix}-vlad-eks-cluster"
+  cluster_users = try([
+    for arn in var.cluster_users :
+    {
+      userarn  = arn
+      username = regex("[a-zA-Z0-9-_]+$", arn)
+      groups = [
+        "system:masters"
+      ]
+    }
+  ], [])
 }
 
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
-  version                         = "20.11.0"
+  version                         = "19.5.1"
   cluster_name                    = local.cluster_name
   cluster_version                 = "1.29"
   vpc_id                          = module.vpc.vpc_id
@@ -29,7 +39,8 @@ module "eks" {
   enable_irsa                     = true
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
-
+  aws_auth_users = concat(
+    local.cluster_users)
   create_cloudwatch_log_group = false
   cluster_enabled_log_types   = []
 
@@ -106,3 +117,4 @@ module "eks" {
     }
   }
 }
+
