@@ -35,9 +35,15 @@ variable "cluster_name" {
 
 variable "cluster_users" {
   description = "EKS users"
-  type        = list
+  type        = list(any)
   default = [
-  "arn:aws:iam::975050034278:user/tech_user",
-  "arn:aws:iam::975050034278:user/test_user_2"
+    "arn:aws:iam::975050034278:user/tech_user",
+    "arn:aws:iam::975050034278:user/test_user_2"
   ]
+}
+
+variable "github_token" {
+  type        = string
+  sensitive   = true
+  description = "The OAuth2 to GitHub"
 }
