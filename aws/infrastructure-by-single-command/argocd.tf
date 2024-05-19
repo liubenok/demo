@@ -14,8 +14,9 @@ provider "helm" {
 
 locals {
   argocd = {
-    github_repo_name = "demo"
-    version          = "6.9.3"
+    github_repo_name = "liubenok/demo"
+    ssh_key_repo     = "demo"
+    version          = "5.4.0"
     namespace        = "argocd"
   }
   initial_bootstrap = {
@@ -39,7 +40,7 @@ resource "tls_private_key" "ed25519_argocd" {
 # Add the ssh key as a deploy key
 resource "github_repository_deploy_key" "k8s_repo" {
   title      = "Repository test key"
-  repository = local.argocd.github_repo_name
+  repository = local.argocd.ssh_key_repo
   key        = tls_private_key.ed25519_argocd.public_key_openssh
   read_only  = true
 }
@@ -84,39 +85,39 @@ provider "kubectl" {
 }
 
 
-# resource "kubectl_manifest" "initial_bootstrap" {
-#   yaml_body = templatefile("${path.module}/templates/argocd-initial-bootstrap.yaml", {
-#     namespace      = local.argocd.namespace,
-#     path           = local.initial_bootstrap.path,
-#     repoURL        = local.initial_bootstrap.repoURL,
-#     targetRevision = local.initial_bootstrap.targetRevision,
+resource "kubectl_manifest" "initial_bootstrap" {
+  yaml_body = templatefile("${path.module}/templates/argocd-initial-bootstrap.yaml", {
+    namespace      = local.argocd.namespace,
+    path           = local.initial_bootstrap.path,
+    repoURL        = local.initial_bootstrap.repoURL,
+    targetRevision = local.initial_bootstrap.targetRevision,
 
-#     aws_region               = var.aws_region,
-#     aws_route53_dnsZone      = local.hosted_zone
-#     aws_route53_hostedZoneID = data.aws_route53_zone.zone.zone_id
+    aws_region               = var.aws_region,
+    aws_route53_dnsZone      = var.hosted_zone
+    aws_route53_hostedZoneID = data.aws_route53_zone.zone.zone_id
 
-#     clusterName = module.eks.cluster_id,
+    clusterName = module.eks.cluster_name,
 
-#     source_repoURL        = local.initial_bootstrap.repoURL,
-#     source_targetRevision = local.initial_bootstrap.targetRevision,
+    source_repoURL        = local.initial_bootstrap.repoURL,
+    source_targetRevision = local.initial_bootstrap.targetRevision,
 
-#     bootstrapApp_certManager_serviceAccountName      = local.cert_manager.service_account_name,
-#     bootstrapApp_certManager_serviceAccountNamespace = local.cert_manager.namespace,
-#     bootstrapApp_certManager_eksRoleArn              = module.irsa_cert_manager.iam_role_arn,
+    bootstrapApp_certManager_serviceAccountName      = local.cert_manager.service_account_name,
+    bootstrapApp_certManager_serviceAccountNamespace = local.cert_manager.namespace,
+    bootstrapApp_certManager_eksRoleArn              = module.irsa_cert_manager.iam_role_arn,
 
-#     bootstrapApp_certManagerConfigs_acme_email = local.initial_bootstrap.acme_email,
+    bootstrapApp_certManagerConfigs_acme_email = local.initial_bootstrap.acme_email,
 
-#     bootstrapApp_awsLBController_serviceAccountName = local.aws_load_balancer_controller.service_account_name,
-#     bootstrapApp_awsLBController_namespace          = local.aws_load_balancer_controller.namespace,
-#     bootstrapApp_awsLBController_eksRoleArn         = module.irsa_aws_load_balancer_controller.iam_role_arn,
+    bootstrapApp_awsLBController_serviceAccountName = local.aws_load_balancer_controller.service_account_name,
+    bootstrapApp_awsLBController_namespace          = local.aws_load_balancer_controller.namespace,
+    bootstrapApp_awsLBController_eksRoleArn         = module.irsa_aws_load_balancer_controller.iam_role_arn,
 
-#     bootstrapApp_externalDNS_serviceAccountName = local.external_dns.service_account_name,
-#     bootstrapApp_externalDNS_namespace          = local.external_dns.namespace,
-#     bootstrapApp_externalDNS_eksRoleArn         = module.irsa_external_dns.iam_role_arn
-#   })
+    bootstrapApp_externalDNS_serviceAccountName = local.external_dns.service_account_name,
+    bootstrapApp_externalDNS_namespace          = local.external_dns.namespace,
+    bootstrapApp_externalDNS_eksRoleArn         = module.irsa_external_dns.iam_role_arn
+  })
 
-#   depends_on = [
-#     helm_release.argocd,
-#     github_repository_deploy_key.k8s_repo
-#   ]
-# }
+  depends_on = [
+    helm_release.argocd,
+    github_repository_deploy_key.k8s_repo
+  ]
+}

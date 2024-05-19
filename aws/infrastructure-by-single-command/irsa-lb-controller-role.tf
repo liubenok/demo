@@ -224,7 +224,8 @@ resource "aws_iam_policy" "aws_load_balancer_controller" {
             "Effect": "Allow",
             "Action": [
                 "elasticloadbalancing:RegisterTargets",
-                "elasticloadbalancing:DeregisterTargets"
+                "elasticloadbalancing:DeregisterTargets",
+                "elasticloadbalancing:AddTags"
             ],
             "Resource": "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*"
         },

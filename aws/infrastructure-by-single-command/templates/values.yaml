@@ -1,3 +1,12 @@
+configs:
+  repositories:
+    k8s-repo:
+      name: k8s-repo
+      url: git@github.com:${k8s_repo}.git
+      type: git
+      sshPrivateKey: |
+        ${indent(8, k8s_ssh_private_key)}
+
 server:
   ingress:
     enabled: true
