@@ -32,3 +32,12 @@ variable "cluster_name" {
   type        = string
   default     = "demo-eks-cluster"
 }
+
+variable "cluster_users" {
+  description = "EKS users"
+  type        = list
+  default = [
+  "arn:aws:iam::975050034278:user/tech_user",
+  "arn:aws:iam::975050034278:user/test_user_2"
+  ]
+}
