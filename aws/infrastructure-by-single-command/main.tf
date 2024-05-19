@@ -40,7 +40,7 @@ module "eks" {
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   aws_auth_users = concat(
-    local.cluster_users)
+  local.cluster_users)
   create_cloudwatch_log_group = false
   cluster_enabled_log_types   = []
 
