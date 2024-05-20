@@ -13,8 +13,7 @@ spec:
     helm:
       values: |
         hosts:
-          app1: {{ .Values.appHosts.app1 }}
-          app2: {{ .Values.appHosts.app2 }}
+          app: {{ .Values.appHosts.app }}
 
         clusterIssuer:
           name: {{ .Values.clusterIssuer.name }}
