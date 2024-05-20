@@ -1,0 +1,55 @@
+name: "Build and Push Docker Image to Docker Hub"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'web-server-application/app-1/**'
+      - 'web-server-application/app-2/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'web-server-application/app-1/**'
+      - 'web-server-application/app-2/**'
+
+jobs:
+  push_to_registry:
+    name: push docker image to hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: check repository
+        uses: actions/checkout@v4
+
+      - name: Check python script APP-1
+        id: validate_app1_script
+        run: python -m py_compile web-server-application/app-1/server.py
+        continue-on-error: true
+
+      - name: Check python script APP-2
+        id: validate_app2_script
+        run: python -m py_compile web-server-application/app-2/server.py
+        continue-on-error: true
+        
+      - name: login to docker registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+      - name: Build the Docker image
+        run: docker build web-server-application/app-1/ --file web-server-application/app-1/Dockerfile --tag lyubenok/app:v1.0.0
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+      - name: Docker Push
+        run: docker push lyubenok/app:v1.0.0
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+      - name: Build the Docker image
+        run: docker build web-server-application/app-2/ --file web-server-application/app-2/Dockerfile --tag lyubenok/app:v2.0.0
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Docker Push
+        run: docker push lyubenok/app:v2.0.0
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'

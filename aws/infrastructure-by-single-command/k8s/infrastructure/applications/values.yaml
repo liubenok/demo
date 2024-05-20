@@ -7,7 +7,7 @@ aws:
 clusterName: eks-cluster
 
 source:
-  repoURL: git@gitlab.com:example/example.git
+  repoURL: git@github.com:example/example.git
   targetRevision: main
 
 bootstrapApp:
